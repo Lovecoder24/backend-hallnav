@@ -10,7 +10,7 @@ from pathlib import Path
 from django.shortcuts import render # You may need to add this import
 from django.views.generic import TemplateView
 from .models import Hall, Schedule
-
+from .utils import recognize_hall
 # --- PyTorch Model Integration ---
 # Model file colocated in the recognition app directory
 MODEL_PATH = Path(__file__).resolve().parent / 'hall_classifier_raw.pth'
@@ -190,3 +190,19 @@ def recognize_hall(request):
     except Exception as e:
         # System errors
         return JsonResponse({"error": f"Recognition processing failed: {str(e)}", "status": "system_error"}, status=500)
+
+
+
+
+
+def recognize_hall_view(request):
+    if request.method == "POST" and request.FILES["image"]:
+        image_file = request.FILES["image"]
+        image_path = f"/tmp/{image_file.name}"
+        
+        with open(image_path, "wb+") as f:
+            for chunk in image_file.chunks():
+                f.write(chunk)
+        
+        hall_name = recognize_hall(image_path)
+        return JsonResponse({"recognized_hall": hall_name})

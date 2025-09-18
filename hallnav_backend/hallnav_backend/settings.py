@@ -96,6 +96,7 @@ DATABASES = {
     }
 }
 
+DATABASES ['default'] =dg_databse_url.parse('postgresql://root:195jsudRScsHie0YmuRvpZVTMufT7IMt@dpg-d35njm1r0fns739le8fg-a.oregon-postgres.render.com/testdb_ak7g')
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
