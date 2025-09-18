@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-e^ye-30cfs(rfm^3qncsquus@-6knzg^&91(5g$e867acmz*vi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ai-powered-lecture-hall-information.onrender.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['https://backend-hallnav.onrender.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
