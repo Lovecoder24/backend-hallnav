@@ -10,7 +10,7 @@ from pathlib import Path
 from django.shortcuts import render # You may need to add this import
 from django.views.generic import TemplateView
 from .models import Hall, Schedule
-
+from .utils import recognize_hall   
 # --- PyTorch Model Integration ---
 # Model file colocated in the recognition app directory
 MODEL_PATH = Path(__file__).resolve().parent / 'hall_classifier_raw.pth'
@@ -33,18 +33,25 @@ def get_model():
     global _model
     if _model is None:
         if not MODEL_PATH.exists():
-            raise FileNotFoundError(f"Model file not found at {MODEL_PATH}")
-        model = models.mobilenet_v2(pretrained=False)
-        num_classes = len(CLASS_NAMES)
-        model.classifier[1] = nn.Linear(model.classifier[1].in_features, num_classes)
-        state = torch.load(str(MODEL_PATH), map_location=torch.device('cpu'))
-        model.load_state_dict(state)
-        # Sanity check: classifier output size must match class names
-        out_features = model.classifier[1].out_features
-        if out_features != num_classes:
-            raise ValueError(f"Model classifier out_features={out_features} does not match len(CLASS_NAMES)={num_classes}")
-        model.eval()
-        _model = model
+            raise FileNotFoundError(f"Error: The model file was not found at {MODEL_PATH}")
+        try:
+            # 1. Load the pre-trained model (e.g., MobileNetV2).
+            # You must use the exact same model that was used for training.
+            model = models.mobilenet_v2(weights=None)
+
+            # 2. Modify the classifier head to match your output classes.
+            num_ftrs = model.classifier[1].in_features
+            # Assuming 2 classes as per CLASS_NAMES = ['LT1 & 2', 'LT3 & 4']
+            model.classifier[1] = nn.Linear(num_ftrs, len(CLASS_NAMES))
+
+            # 3. Load the state dictionary
+            model.load_state_dict(torch.load(str(MODEL_PATH), map_location=torch.device("cpu")))
+
+            model.eval()
+            _model = model
+        except Exception as e:
+            print(f"An error occurred while loading the model: {e}")
+            _model = None # Ensure _model is reset if loading fails
     return _model
 
 # Validation functions for edge cases
@@ -190,3 +197,4 @@ def recognize_hall(request):
     except Exception as e:
         # System errors
         return JsonResponse({"error": f"Recognition processing failed: {str(e)}", "status": "system_error"}, status=500)
+

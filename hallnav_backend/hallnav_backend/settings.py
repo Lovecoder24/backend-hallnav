@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import dj_database_url
 from pathlib import Path
 import os
 
@@ -95,6 +95,20 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES ['default'] =dg_databse_url.parse('postgresql://root:195jsudRScsHie0YmuRvpZVTMufT7IMt@dpg-d35njm1r0fns739le8fg-a.oregon-postgres.render.com/testdb_ak7g')
+# Use environment variables for sensitive info
+SECRET_KEY = os.environ.get('SECRET_KEY')
+ALLOWED_HOSTS = ['your-render-app-name.onrender.com', 'localhost']
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        conn_health_checks=True
+    )
+}
+
 
 
 # Password validation
