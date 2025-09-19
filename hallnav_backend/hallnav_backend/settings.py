@@ -96,6 +96,7 @@ DATABASES = {
     }
 }
 
+<<<<<<< HEAD
 # DATABASES ['default'] =dg_databse_url.parse('postgresql://root:195jsudRScsHie0YmuRvpZVTMufT7IMt@dpg-d35njm1r0fns739le8fg-a.oregon-postgres.render.com/testdb_ak7g')
 # Use environment variables for sensitive info
 SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -110,6 +111,9 @@ DATABASES = {
 }
 
 
+=======
+DATABASES ['default'] =dg_databse_url.parse('postgresql://root:195jsudRScsHie0YmuRvpZVTMufT7IMt@dpg-d35njm1r0fns739le8fg-a.oregon-postgres.render.com/testdb_ak7g')
+>>>>>>> 438a38c6f51f4eb2942ae6d74ada2d1f1b1cb28f
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

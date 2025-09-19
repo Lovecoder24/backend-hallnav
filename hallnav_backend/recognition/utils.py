@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import os
 import torch
 import torch.nn as nn
@@ -44,24 +45,54 @@ def load_model():
     except Exception as e:
         print(f"An error occurred while loading the model: {e}")
         return None
+=======
+import torch
+import torch.nn as nn
+import torchvision.models as models
+from torchvision import transforms
+from PIL import Image
+
+# Load model
+def load_model():
+    model = models.mobilenet_v2(pretrained=False)
+    model.classifier[1] = nn.Linear(model.last_channel, 2)
+    model.load_state_dict(torch.load(
+        "backend/hallnav_backend/recognition/hall_classifier_raw.pth",
+        map_location=torch.device("cpu")
+    ))
+    model.eval()
+    return model
+>>>>>>> 438a38c6f51f4eb2942ae6d74ada2d1f1b1cb28f
 
 # Initialize model once
 model = load_model()
 
+<<<<<<< HEAD
 # Preprocessing
+=======
+# Preprocessing same as training
+>>>>>>> 438a38c6f51f4eb2942ae6d74ada2d1f1b1cb28f
 transform = transforms.Compose([
     transforms.Resize(256),
     transforms.CenterCrop(224),
     transforms.ToTensor(),
+<<<<<<< HEAD
     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+=======
+    transforms.Normalize([0.485, 0.456, 0.406],
+                         [0.229, 0.224, 0.225])
+>>>>>>> 438a38c6f51f4eb2942ae6d74ada2d1f1b1cb28f
 ])
 
 # Recognition function
 def recognize_hall(image_path):
+<<<<<<< HEAD
     if model is None:
         print("Model is not loaded. Cannot perform recognition.")
         return None
 
+=======
+>>>>>>> 438a38c6f51f4eb2942ae6d74ada2d1f1b1cb28f
     image = Image.open(image_path).convert("RGB")
     input_tensor = transform(image).unsqueeze(0)
 
@@ -70,4 +101,8 @@ def recognize_hall(image_path):
         _, pred = torch.max(outputs, 1)
 
     classes = ["LT1 & 2", "LT3 & 4"]
+<<<<<<< HEAD
     return classes[pred.item()]
+=======
+    return classes[pred.item()]
+>>>>>>> 438a38c6f51f4eb2942ae6d74ada2d1f1b1cb28f
